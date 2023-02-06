@@ -1,0 +1,51 @@
+
+* {
+  font-family: Verdana, Helvetica, sans-serif;
+  font-size: 8pt;
+}
+body {
+  text-align: center;
+}
+h1 {
+  font-size: 8pt;
+}
+table {
+  border: 1px solid #ABABAB;
+  padding: 0;
+  margin: 0;
+  cursor: default;
+  background: url(img/table-bg.gif);
+}
+table td {
+  width: 18px;
+  height: 18px;
+}
+table td.over {
+  background: url(img/over.gif);
+}
+table td.over2 {
+  background: url(img/over2.gif);
+}
+table td.start-point {
+  background: url(img/start-point.gif);
+}
+table td.not-available {
+  width: 12px;
+  height: 12px;
+  background: url(img/obstacle.gif) no-repeat;
+}
+#atable {
+  margin: auto;
+}
+#astar {
+  width: 560px;
+  margin: auto;
+}
+#buttons {
+  float: right;
+  text-align: left;
+  width: 100px;
+}
+.c-left {
+  clear: left;
+}

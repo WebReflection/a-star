@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="first.css">
+  <script defer src="legacy2.js"></script>
+  <script type="module">
+  import AStar from '../esm/index.js';
+  globalThis.AStar = AStar;
+  </script>
+  <title>A* first demo</title>
+</head>
+<body>
+  <div id="astar">
+    <div id="buttons">
+      <input type="button" value="new map" onclick="NewTable()">
+      <p>
+        <select id="colsrows" onchange="NewDimension();">
+          <option value="10x10">10x10</option>
+          <option selected="selected" value="20x20">20x20</option>
+          <option value="30x30">30x30</option>
+          <option value="40x40">40x40</option>
+        </select>
+      </p>
+      <p>
+        <select id="method">
+          <option selected="selected" value="Manhattan">Manhattan</option>
+          <option value="Diagonal">Diagonal</option>
+          <option value="Euclidean">Euclidean</option>
+          <option value="DiagonalFree">DiagonalFree</option>
+          <option value="EuclideanFree">EuclideanFree</option>
+        </select>
+      </p>
+      <p id="result">Time (ms): <strong>3</strong><br>Path Length: <strong>30</strong></p>
+    </div>
+    <div id="atable"></div>
+    <br class="c-left">
+    <div><a href="second.html">view example 2</a></div>
+  </div>
+</body>
+</html>
