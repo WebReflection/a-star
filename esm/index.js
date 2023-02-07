@@ -52,11 +52,11 @@ function successors(find, x, y, grid, rows, cols){
   return find($N, $S, $E, $W, N, S, E, W, grid, rows, cols, result, i);
 }
 
-function diagonal(start, end, f1, f2) {
-  return f2(f1(start.x - end.x), f1(start.y - end.y));
+function diagonal(start, end, f2) {
+  return f2(abs(start.x - end.x), abs(start.y - end.y));
 }
 
-function euclidean(start, end, f1, f2) {
+function euclidean(start, end, f2) {
   var
       x = start.x - end.x,
       y = start.y - end.y
@@ -64,22 +64,24 @@ function euclidean(start, end, f1, f2) {
   return f2(x * x + y * y);
 }
 
-function manhattan(start, end, f1, f2) {
-  return f1(start.x - end.x) + f1(start.y - end.y);
+function manhattan(start, end) {
+  return abs(start.x - end.x) + abs(start.y - end.y);
 }
+
+const {abs, max, sqrt} = Math;
 
 function AStar(grid, start, end, f) {
   var
       cols = grid[0].length,
       rows = grid.length,
       limit = cols * rows,
-      f1 = Math.abs,
-      f2 = Math.max,
-      list = {},
+      list = new Set,
       result = [],
       open = [{x:start[0], y:start[1], f:0, g:0, v:start[0]+start[1]*cols}],
       length = 1,
-      adj, distance, find, i, j, max, min, current, next
+      f2 = max,
+      find = diagonalSuccessorsFree,
+      adj, distance, i, j, cap, low, current, next
   ;
   end = {x:end[0], y:end[1], v:end[0]+end[1]*cols};
   switch (f) {
@@ -91,7 +93,7 @@ function AStar(grid, start, end, f) {
       case "Euclidean":
           find = diagonalSuccessors;
       case "EuclideanFree":
-          f2 = Math.sqrt;
+          f2 = sqrt;
           distance = euclidean;
           break;
       default:
@@ -99,35 +101,34 @@ function AStar(grid, start, end, f) {
           find = nothingToDo;
           break;
   }
-  find || (find = diagonalSuccessorsFree);
   do {
-      max = limit;
-      min = 0;
+      cap = limit;
+      low = 0;
       for(i = 0; i < length; ++i) {
-          if((f = open[i].f) < max) {
-              max = f;
-              min = i;
+          if((f = open[i].f) < cap) {
+              cap = f;
+              low = i;
           }
       };
-      current = open.splice(min, 1)[0];
+      current = open.splice(low, 1)[0];
       if (current.v != end.v) {
           --length;
           next = successors(find, current.x, current.y, grid, rows, cols);
           for(i = 0, j = next.length; i < j; ++i){
               (adj = next[i]).p = current;
-              adj.f = adj.g = 0;
               adj.v = adj.x + adj.y * cols;
-              if(!(adj.v in list)){
-                  adj.f = (adj.g = current.g + distance(adj, current, f1, f2)) + distance(adj, end, f1, f2);
+              if (list.has(adj.v))
+                adj.f = adj.g = 0;
+              else {
+                  adj.f = (adj.g = current.g + distance(adj, current, f2)) + distance(adj, end, f2);
                   open[length++] = adj;
-                  list[adj.v] = 1;
+                  list.add(adj.v);
               }
           }
       } else {
           i = length = 0;
-          do {
-              result[i++] = [current.x, current.y];
-          } while (current = current.p);
+          do { result[i++] = [current.x, current.y] }
+          while ((current = current.p));
           result.reverse();
       }
   } while (length);

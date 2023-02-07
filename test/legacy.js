@@ -48,11 +48,11 @@ function GridTable(width, height){
           td.onmouseout = function(){this.className = ""};
           td.onclick = function(){
             var	endPoint = [this.x, this.y],
-              bench = (new Date()).getTime(),
+              bench = performance.now(),
               result = AStar(grid, startPoint, endPoint,
                 document.getElementById("method").value
               ),
-              endTime = (new Date()).getTime() - bench;
+              endTime = performance.now() - bench;
             document.getElementById("result").innerHTML = "".concat(
               "Time (ms): <strong>", endTime, "</strong><br />",
               result.length === 0 ?

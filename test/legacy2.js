@@ -59,11 +59,11 @@ function GridTable(width, height){
           td.onmouseout = function(){this.className = ""};
           td.onclick = function(){
             var	endPoint = [this.x, this.y],
-              bench = (new Date()).getTime(),
+              bench = performance.now(),
               result = AStar(grid, startPoint, endPoint,
                 document.getElementById("method").value
               ),
-              endTime = (new Date()).getTime() - bench;
+              endTime = performance.now() - bench;
             if(table.last.first) {
               table.last.remonmouseout = this.onmouseout;
               table.last.remonmouseover = this.onmouseover;
